@@ -9,7 +9,7 @@ import 'package:weatheria/redux/appstate.dart';
 
 Middleware<AppState> appStateMiddleWare() {
   return (Store store, action, NextDispatcher next) async {
-		if (action is WeatherFetch) {
+    if (action is WeatherFetch) {
       try {
         store.dispatch(WeatherLoading());
         Weather w = await fetchWeather(action.cityName);
@@ -22,11 +22,13 @@ Middleware<AppState> appStateMiddleWare() {
   };
 }
 
-
 Future<Weather> fetchWeather(String cityName) async {
   String apiKeys = await rootBundle.loadString("api/api.json");
   Map<dynamic, dynamic> apiKeysDict = await jsonDecode(apiKeys);
-  http.Response OWM = await http.get("http://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=${apiKeysDict["OpenWeatherMapAPI"]}");
+  http.Response OWM = await http
+      .get("https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=${apiKeysDict["OpenWeatherMapAPI"]}")
+      .catchError((_) => throw Exception("Fetching weather failed."));
+  Future.wait([Future.delayed(Duration(seconds: 1))]);
   if (OWM.statusCode != 200) {
     throw Exception("Fetching weather failed.");
   }

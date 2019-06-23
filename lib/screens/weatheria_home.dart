@@ -50,7 +50,7 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
               _displayGeneralTemperatureWithIcon(
                   temperature: state.weatherState.temperature,
                   icon: state.weatherState.weatherIcon()),
-              _horizontalDivider(context),
+              // _horizontalDivider(context),
               _displaySunsetAndSunrise(state),
             ],
           ),
@@ -81,9 +81,7 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
             "Please check your internet or the city name you gave.",
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 11,
-                fontWeight: FontWeight.w700),
+                color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700),
           )
         ],
       ),
@@ -118,71 +116,69 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
 
   Center _displayLoadingIndicator() {
     return Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(Color(0xF3A683FF)),
-          backgroundColor: Color(0xF19066FF),
-        ),
-      );
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+        valueColor: AlwaysStoppedAnimation<Color>(Color(0xF3A683FF)),
+        backgroundColor: Color(0xF19066FF),
+      ),
+    );
   }
 
   Row _displaySunsetAndSunrise(AppState state) {
     return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                _displaySunsetOrSunrise(
-                    time: state.weatherState.sunrise +
-                        state.weatherState.timezone,
-                    mode: sunMode.SUNRISE,
-                    iconColor: Colors.yellow[200]),
-                Container(
-                  width: 1,
-                  height: 30,
-                  decoration: BoxDecoration(color: Colors.white70),
-                ),
-                _displaySunsetOrSunrise(
-                    time: state.weatherState.sunset +
-                        state.weatherState.timezone,
-                    mode: sunMode.SUNSET,
-                    iconColor: Colors.red[200]),
-              ],
-            );
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        _displaySunsetOrSunrise(
+            time: state.weatherState.sunrise + state.weatherState.timezone,
+            mode: sunMode.SUNRISE,
+            iconColor: Colors.yellow[200]),
+        Container(
+          width: 1,
+          height: 40,
+          decoration: BoxDecoration(color: Colors.white70),
+        ),
+        _displaySunsetOrSunrise(
+            time: state.weatherState.sunset + state.weatherState.timezone,
+            mode: sunMode.SUNSET,
+            iconColor: Colors.red[200]),
+      ],
+    );
   }
 
   Container _horizontalDivider(BuildContext context) {
     return Container(
-              width: MediaQuery.of(context).size.width / 2,
-              height: 1,
-              decoration: BoxDecoration(color: Colors.white70),
-            );
+      width: MediaQuery.of(context).size.width / 2,
+      height: 1,
+      decoration: BoxDecoration(color: Colors.white70),
+    );
   }
 
   Text _displayCityAndCountryName(AppState state) {
     return Text(
-              "${state.weatherState.city}, ${state.weatherState.country}",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  decorationStyle: TextDecorationStyle.dotted,
-                  decoration: TextDecoration.combine([
-                    TextDecoration.underline,
-                  ])),
-            );
+      "${state.weatherState.city}, ${state.weatherState.country}",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          decorationStyle: TextDecorationStyle.dotted,
+          decoration: TextDecoration.combine([
+            TextDecoration.underline,
+          ])),
+    );
   }
 
   Text _displayCityDateAndTime(AppState state) {
     return Text(
-              "${DateFormat.yMMMMd().add_Hm().format(DateTime.fromMillisecondsSinceEpoch((state.weatherState.time + state.weatherState.timezone) * 1000).toUtc())}",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  decorationStyle: TextDecorationStyle.dotted,
-                  decoration: TextDecoration.combine([
-                    TextDecoration.underline,
-                  ])),
-            );
+      "${DateFormat.yMMMMd().add_Hm().format(DateTime.fromMillisecondsSinceEpoch((state.weatherState.time + state.weatherState.timezone) * 1000).toUtc())}",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          decorationStyle: TextDecorationStyle.dotted,
+          decoration: TextDecoration.combine([
+            TextDecoration.underline,
+          ])),
+    );
   }
 
   Widget _displayGeneralTemperatureWithIcon(
@@ -214,18 +210,26 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
 
   Widget _displaySunsetOrSunrise({sunMode mode, int time, Color iconColor}) {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          Container(
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.blueGrey),
+            child: Icon(
+              WeatherIcons.sunrise,
+              size: 40,
+              color: iconColor,
+            ),
+          ),
+          SizedBox(width: 25,),
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: Colors.blueGrey),
-                child: Icon(
-                  WeatherIcons.sunrise,
-                  size: 30,
-                  color: iconColor,
-                ),
+              Text(
+                "${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(time * 1000).toUtc())}",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, color: Colors.white70),
               ),
               Text(
                 mode == sunMode.SUNSET ? "Sunset" : "Sunrise",
@@ -234,14 +238,6 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
               )
             ],
           ),
-          SizedBox(
-            width: 20,
-          ),
-          Text(
-            "${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(time * 1000).toUtc())}",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, color: Colors.white70),
-          )
         ]);
   }
 }
