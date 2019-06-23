@@ -77,3 +77,14 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  fonts:
+    - family: Mali
+      fonts:
+      - asset: assets/fonts/mali/Mali-Regular.ttf
+      - asset: assets/fonts/mali/Mali-SemiBold.ttf
+        weight: 700
+
+    - family: Weather
+      fonts:
+       - asset: assets/fonts/icons/Weather.ttf

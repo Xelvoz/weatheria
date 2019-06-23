@@ -15,6 +15,7 @@ class Weatheria extends StatefulWidget {
 }
 
 class _WeatheriaState extends State<Weatheria> {
+  final TextEditingController _controller = TextEditingController();
   final Store store;
   FocusNode searchFocus = FocusNode();
   String cityName;
@@ -26,6 +27,7 @@ class _WeatheriaState extends State<Weatheria> {
     return StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
+        theme: ThemeData(fontFamily: "Mali"),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: Stack(
@@ -50,7 +52,9 @@ class _WeatheriaState extends State<Weatheria> {
   }
 
   TextField _searchInput(Store store) {
+
     return TextField(
+      controller: _controller,
       textAlign: TextAlign.center,
       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       focusNode: searchFocus,
@@ -72,12 +76,15 @@ class _WeatheriaState extends State<Weatheria> {
       },
       onSubmitted: (value) {
         store.dispatch(WeatherFetch(cityName: cityName));
+        searchFocus.unfocus();
+        _controller.clear();
       },
     );
   }
 
   FloatingActionButton _searchButton(Store store) {
     return FloatingActionButton(
+      
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.red,
       disabledElevation: 0,
@@ -88,10 +95,12 @@ class _WeatheriaState extends State<Weatheria> {
         Icons.search,
         color: Colors.white,
       ),
-      onPressed: () {
+      onPressed: 
+      _controller.text.length > 0 ? () {
         store.dispatch(WeatherFetch(cityName: cityName));
         searchFocus.unfocus();
-      },
+        _controller.clear();
+      } : null,
     );
   }
 }

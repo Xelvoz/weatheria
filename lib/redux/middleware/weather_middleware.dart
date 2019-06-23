@@ -11,6 +11,7 @@ Middleware<AppState> appStateMiddleWare() {
   return (Store store, action, NextDispatcher next) async {
 		if (action is WeatherFetch) {
       try {
+        next(WeatherLoading());
         Weather w = await fetchWeather(action.cityName);
         next(WeatherLoaded(weather: w));
       } catch (_) {
