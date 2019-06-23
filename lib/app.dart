@@ -34,14 +34,12 @@ class _WeatheriaState extends State<Weatheria> {
             children: <Widget>[
               WeatheriaHome(),
               AppBar(
-                leading: Icon(
-                  Icons.map,
-                  color: Colors.white54,
-                ),
-                centerTitle: true,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
-                actions: <Widget>[_searchButton(store)],
+                actions: <Widget>[
+                  _searchButton(store),
+                  _settingsButton(store, context)
+                ],
                 title: _searchInput(store),
               ),
             ],
@@ -52,7 +50,6 @@ class _WeatheriaState extends State<Weatheria> {
   }
 
   TextField _searchInput(Store store) {
-
     return TextField(
       controller: _controller,
       textAlign: TextAlign.center,
@@ -71,7 +68,7 @@ class _WeatheriaState extends State<Weatheria> {
       keyboardType: TextInputType.text,
       onChanged: (value) {
         setState(() {
-         cityName = value; 
+          cityName = value;
         });
       },
       onSubmitted: (value) {
@@ -84,7 +81,6 @@ class _WeatheriaState extends State<Weatheria> {
 
   FloatingActionButton _searchButton(Store store) {
     return FloatingActionButton(
-      
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.red,
       disabledElevation: 0,
@@ -95,12 +91,35 @@ class _WeatheriaState extends State<Weatheria> {
         Icons.search,
         color: Colors.white,
       ),
-      onPressed: 
-      _controller.text.length > 0 ? () {
-        store.dispatch(WeatherFetch(cityName: cityName));
-        searchFocus.unfocus();
-        _controller.clear();
-      } : null,
+      onPressed: _controller.text.length > 0
+          ? () {
+              store.dispatch(WeatherFetch(cityName: cityName));
+              searchFocus.unfocus();
+              _controller.clear();
+            }
+          : null,
     );
+  }
+
+  FloatingActionButton _settingsButton(Store store, BuildContext context) {
+    return FloatingActionButton(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.red,
+        disabledElevation: 0,
+        highlightElevation: 0,
+        elevation: 0,
+        mini: true,
+        child: Icon(
+          Icons.settings,
+          color: Colors.white,
+        ),
+        onPressed: () => {});
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    searchFocus.dispose();
+    super.dispose();
   }
 }

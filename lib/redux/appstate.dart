@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:weatheria/models/weather.dart';
 import 'package:weatheria/redux/screens.dart';
+import 'package:flutter/material.dart';
+
 
 class AppState extends Equatable {
   final SCREENS currentScreen;
@@ -21,8 +23,11 @@ class AppState extends Equatable {
         isLoading: isLoading ?? this.isLoading);
   }
 
+  Color colorBegin() => (weatherState == null) ? Color(0xFF574B90) : (weatherState.icon.contains("n"))? Color(0xFF303952): Color(0xFFF19066);
+  Color colorEnd() => (weatherState == null) ? Color(0xFF786FA6) : (weatherState.icon.contains("n"))? Color(0xFF596275): Color(0xFFF5CD79);
+
   @override
   String toString() {
-    return "isLoading: $isLoading, loadingError: $loadingError";    
+    return "Weather: $weatherState, isLoading: $isLoading, loadingError: $loadingError";    
   }
 }

@@ -28,6 +28,7 @@ dependencies:
   equatable:
   http:
   redux_logging:
+  intl:
 
 dev_dependencies:
   flutter_test:
