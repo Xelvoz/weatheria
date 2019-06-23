@@ -12,12 +12,11 @@ Middleware<AppState> appStateMiddleWare() {
 		if (action is WeatherFetch) {
       try {
         Weather w = await fetchWeather(action.cityName);
-        store.dispatch(WeatherLoaded(weather: w));
+        next(WeatherLoaded(weather: w));
       } catch (_) {
-        store.dispatch(WeatherError());
+        next(WeatherError());
       }
     }
-    next(action);
   };
 }
 
