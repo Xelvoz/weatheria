@@ -4,4 +4,4 @@
 
 ## Known bugs to be resolved:
 
-[ ] `StoreConnector` doesn't update rebuild widget tree on AppState change.
+ [ ] `StoreConnector` doesn't update rebuild widget tree on AppState change.
