@@ -75,7 +75,7 @@ class Weather extends Equatable {
       humidity: json["main"]["temp"],
       pressure: json["main"]["pressure"],
       visibility: json["visibility"],
-      windSpeed: json["wind"]["speed"],
+      windSpeed: (json["wind"]["speed"] as double),
       windDirection: json["wind"]["deg"],
       city: json["name"],
       country: json["sys"]["country"]);

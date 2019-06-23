@@ -11,13 +11,14 @@ Middleware<AppState> appStateMiddleWare() {
   return (Store store, action, NextDispatcher next) async {
 		if (action is WeatherFetch) {
       try {
-        next(WeatherLoading());
+        store.dispatch(WeatherLoading());
         Weather w = await fetchWeather(action.cityName);
-        next(WeatherLoaded(weather: w));
+        store.dispatch(WeatherLoaded(weather: w));
       } catch (_) {
-        next(WeatherError());
+        store.dispatch(WeatherError());
       }
     }
+    next(action);
   };
 }
 

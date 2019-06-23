@@ -21,10 +21,7 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
                   gradient: LinearGradient(
                       begin: Alignment.bottomLeft,
                       end: Alignment.topRight,
-                      colors: [
-                    state.colorBegin(),
-                    state.colorEnd()
-                  ])),
+                      colors: [state.colorBegin(), state.colorEnd()])),
               child: Padding(
                   padding: const EdgeInsets.only(top: 80),
                   child: Column(
@@ -36,117 +33,156 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
   }
 
   Widget _displayWeatherInfo(BuildContext context, AppState state) {
-    if (state.loadingError) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.warning,
-              size: 100,
-              color: Colors.red[300],
-            ),
-            Text(
-              "Oops... Something went wrong...",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              "Please check your internet or the city name you gave.",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700),
-            )
-          ],
-        ),
-      );
-    } else if (state.weatherState == null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.arrow_upward,
-              size: 100,
-              color: Colors.white,
-            ),
-            Text(
-              "Please choose a city above.",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  decorationStyle: TextDecorationStyle.dotted,
-                  decoration: TextDecoration.combine([
-                    TextDecoration.overline,
-                  ])),
-            )
-          ],
-        ),
-      );
+    if (state.status == Status.ERROR) {
+      return _displayErrorScreen();
+    } else if (state.status == Status.IDLE) {
+      return _displayStartingScreenHelper();
     } else {
-      if (state.isLoading) {
-        return Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation<Color>(Color(0xF3A683FF)),
-            backgroundColor: Color(0xF19066FF),
-          ),
-        );
+      if (state.status == Status.LOADING) {
+        return _displayLoadingIndicator();
       } else {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text(
-                "${state.weatherState.city}, ${state.weatherState.country}",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    decorationStyle: TextDecorationStyle.dotted,
-                    decoration: TextDecoration.combine([
-                      TextDecoration.underline,
-                    ])),
-              ),
+              _displayCityAndCountryName(state),
+              _displayCityDateAndTime(state),
               _displayGeneralTemperatureWithIcon(
                   temperature: state.weatherState.temperature,
                   icon: state.weatherState.weatherIcon()),
-              Container(
-                width: MediaQuery.of(context).size.width / 2,
-                height: 1,
-                decoration: BoxDecoration(color: Colors.white70),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  _displaySunsetAndSunrise(
-                      time: state.weatherState.sunrise +
-                          state.weatherState.timezone,
-                      mode: sunMode.SUNRISE,
-                      iconColor: Colors.yellow[200]),
-                  Container(
-                    width: 1,
-                    height: 30,
-                    decoration: BoxDecoration(color: Colors.white70),
-                  ),
-                  _displaySunsetAndSunrise(
-                      time: state.weatherState.sunset +
-                          state.weatherState.timezone,
-                      mode: sunMode.SUNSET,
-                      iconColor: Colors.red[200]),
-                ],
-              ),
+              _horizontalDivider(context),
+              _displaySunsetAndSunrise(state),
             ],
           ),
         );
       }
     }
+  }
+
+  Center _displayErrorScreen() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.warning,
+            size: 100,
+            color: Colors.red[300],
+          ),
+          Text(
+            "Oops... Something went wrong...",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
+          Text(
+            "Please check your internet or the city name you gave.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 11,
+                fontWeight: FontWeight.w700),
+          )
+        ],
+      ),
+    );
+  }
+
+  Center _displayStartingScreenHelper() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.arrow_upward,
+            size: 100,
+            color: Colors.white,
+          ),
+          Text(
+            "Please choose a city above.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                decorationStyle: TextDecorationStyle.dotted,
+                decoration: TextDecoration.combine([
+                  TextDecoration.overline,
+                ])),
+          )
+        ],
+      ),
+    );
+  }
+
+  Center _displayLoadingIndicator() {
+    return Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xF3A683FF)),
+          backgroundColor: Color(0xF19066FF),
+        ),
+      );
+  }
+
+  Row _displaySunsetAndSunrise(AppState state) {
+    return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                _displaySunsetOrSunrise(
+                    time: state.weatherState.sunrise +
+                        state.weatherState.timezone,
+                    mode: sunMode.SUNRISE,
+                    iconColor: Colors.yellow[200]),
+                Container(
+                  width: 1,
+                  height: 30,
+                  decoration: BoxDecoration(color: Colors.white70),
+                ),
+                _displaySunsetOrSunrise(
+                    time: state.weatherState.sunset +
+                        state.weatherState.timezone,
+                    mode: sunMode.SUNSET,
+                    iconColor: Colors.red[200]),
+              ],
+            );
+  }
+
+  Container _horizontalDivider(BuildContext context) {
+    return Container(
+              width: MediaQuery.of(context).size.width / 2,
+              height: 1,
+              decoration: BoxDecoration(color: Colors.white70),
+            );
+  }
+
+  Text _displayCityAndCountryName(AppState state) {
+    return Text(
+              "${state.weatherState.city}, ${state.weatherState.country}",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  decorationStyle: TextDecorationStyle.dotted,
+                  decoration: TextDecoration.combine([
+                    TextDecoration.underline,
+                  ])),
+            );
+  }
+
+  Text _displayCityDateAndTime(AppState state) {
+    return Text(
+              "${DateFormat.yMMMMd().add_Hm().format(DateTime.fromMillisecondsSinceEpoch((state.weatherState.time + state.weatherState.timezone) * 1000).toUtc())}",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  decorationStyle: TextDecorationStyle.dotted,
+                  decoration: TextDecoration.combine([
+                    TextDecoration.underline,
+                  ])),
+            );
   }
 
   Widget _displayGeneralTemperatureWithIcon(
@@ -159,25 +195,24 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 60, color: Colors.white70),
         ),
-      ]..addAll(
-        icon != null ?
-        [
-          Container(
-          width: 1,
-          height: 60,
-          decoration: BoxDecoration(color: Colors.white70),
-        ),
-        Icon(
-          icon,
-          size: 70,
-          color: Colors.white70,
-        )
-        ] : []
-      ),
+      ]..addAll(icon != null
+          ? [
+              Container(
+                width: 1,
+                height: 60,
+                decoration: BoxDecoration(color: Colors.white70),
+              ),
+              Icon(
+                icon,
+                size: 70,
+                color: Colors.white70,
+              )
+            ]
+          : []),
     );
   }
 
-  Widget _displaySunsetAndSunrise({sunMode mode, int time, Color iconColor}) {
+  Widget _displaySunsetOrSunrise({sunMode mode, int time, Color iconColor}) {
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
