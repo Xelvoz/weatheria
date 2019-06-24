@@ -5,6 +5,17 @@ enum FetchType {CITY, GPS}
 abstract class WeatherActions {}
 
 
+class ChangeUnit extends WeatherActions {
+  final Units unit;
+
+  ChangeUnit({this.unit});
+
+  @override
+  String toString() {
+    return "Changing temperature unit to $unit";    
+  }
+}
+
 class WeatherFetch extends WeatherActions {
   final String cityName;
   final FetchType type;
