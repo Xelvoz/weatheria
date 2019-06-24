@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:weatheria/models/weather.dart';
 import 'package:weatheria/redux/actions/weather_actions.dart';
@@ -17,14 +16,14 @@ class WeatheriaSettings extends StatefulWidget {
 
 class _WeatheriaSettingsState extends State<WeatheriaSettings> {
   final Store<AppState> store;
-  Units unit = Units.Celsius;
+  Units unit;
 
   _WeatheriaSettingsState({this.store});
 
   @override
   void initState() {
-    unit = store.state.weatherState?.temperature?.unit;
     super.initState();
+    unit = store.state.weatherState?.temperature?.unit;
   }
 
   @override
@@ -75,9 +74,8 @@ class _WeatheriaSettingsState extends State<WeatheriaSettings> {
             Color(0xFF596275),
           ])),
       child: Padding(
-        padding: const EdgeInsets.only(top: 80),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        padding: const EdgeInsets.only(top: 60),
+        child: ListView(
           children: <Widget>[
             _displayUnitsSettings(store: store),
           ],
@@ -88,6 +86,9 @@ class _WeatheriaSettingsState extends State<WeatheriaSettings> {
 
   Widget _displayUnitsSettings({Store<AppState> store}) {
     return ListTile(
+      dense: true,
+      enabled: true,
+      selected: true,
       title: Text(
         "Temperature Unit",
         style: TextStyle(
@@ -98,7 +99,7 @@ class _WeatheriaSettingsState extends State<WeatheriaSettings> {
             color: Colors.white),
       ),
       subtitle: Text(
-        "Default: Celsius. Available units: Celsius, Fahrenheit, Kelvin.",
+        "Default: Celsius.\nAvailable units: Celsius, Fahrenheit, Kelvin.",
         style: TextStyle(
             fontSize: 9, fontWeight: FontWeight.w700, color: Colors.white54),
       ),
@@ -108,11 +109,10 @@ class _WeatheriaSettingsState extends State<WeatheriaSettings> {
         isDense: true,
         value: unit,
         onChanged: (value) {
+          store.dispatch(ChangeUnit(unit: value));
           setState(() {
             unit = value;
           });
-          store.dispatch(ChangeUnit(unit: value));
-          return value;
         },
         items: <DropdownMenuItem>[
           DropdownMenuItem(

@@ -64,11 +64,13 @@ class _WeatheriaMainState extends State<WeatheriaMain> {
           cityName = value;
         });
       },
-      onSubmitted: (value) {
-        store.dispatch(WeatherFetch(cityName: cityName));
-        searchFocus.unfocus();
-        _controller.clear();
-      },
+      onSubmitted: _controller.text.length > 0
+          ? (value) {
+              store.dispatch(WeatherFetch(cityName: cityName));
+              searchFocus.unfocus();
+              _controller.clear();
+            }
+          : null,
     );
   }
 

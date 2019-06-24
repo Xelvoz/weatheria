@@ -176,12 +176,9 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
       "${DateFormat.yMMMMd().add_Hm().format(DateTime.fromMillisecondsSinceEpoch((state.weatherState.time + state.weatherState.timezone) * 1000).toUtc())}",
       textAlign: TextAlign.center,
       style: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-          decorationStyle: TextDecorationStyle.dotted,
-          decoration: TextDecoration.combine([
-            TextDecoration.underline,
-          ])),
+        color: Colors.white,
+        fontSize: 12,
+      ),
     );
   }
 
@@ -226,7 +223,9 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
               color: iconColor,
             ),
           ),
-          SizedBox(width: 25,),
+          SizedBox(
+            width: 25,
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
