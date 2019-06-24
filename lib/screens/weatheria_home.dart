@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:weatheria/models/weather.dart';
+import 'package:weatheria/redux/actions/weather_actions.dart';
 import 'package:weatheria/redux/appstate.dart';
 import 'package:weatheria/screens/weather_icons.dart';
 
@@ -14,6 +15,9 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
+        onInit: (store) {
+          store.dispatch(WeatherFetch(type: FetchType.GPS));
+        },
         distinct: true,
         converter: (store) => store.state,
         builder: (context, state) => Container(

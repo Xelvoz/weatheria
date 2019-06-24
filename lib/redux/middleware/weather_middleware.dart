@@ -6,29 +6,48 @@ import 'package:redux/redux.dart';
 import 'package:weatheria/models/weather.dart';
 import 'package:weatheria/redux/actions/weather_actions.dart';
 import 'package:weatheria/redux/appstate.dart';
+import 'package:gps/gps.dart';
 
 Middleware<AppState> appStateMiddleWare() {
   return (Store store, action, NextDispatcher next) async {
     if (action is WeatherFetch) {
       try {
         store.dispatch(WeatherLoading());
-        Weather w = await fetchWeather(action.cityName);
+        Weather w;
+        if (action.type == FetchType.CITY) {
+          w = await fetchWeatherByCityName(action.cityName);
+        } else if (action.type == FetchType.GPS) {
+          w = await fetchWeatherByCoordinates();
+        } else {
+          w = await fetchWeatherByCityName(action.cityName);
+        }
         store.dispatch(WeatherLoaded(weather: w));
       } catch (_) {
         store.dispatch(WeatherError());
       }
+    } else {
+      next(action);
     }
-    next(action);
   };
 }
 
-Future<Weather> fetchWeather(String cityName) async {
+Future<Weather> fetchWeatherByCityName(String cityName) async {
   String apiKeys = await rootBundle.loadString("api/api.json");
   Map<dynamic, dynamic> apiKeysDict = await jsonDecode(apiKeys);
-  http.Response OWM = await http
-      .get("https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=${apiKeysDict["OpenWeatherMapAPI"]}")
-      .catchError((_) => throw Exception("Fetching weather failed."));
-  Future.wait([Future.delayed(Duration(seconds: 1))]);
+  http.Response OWM = await http.get(
+      "https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=${apiKeysDict["OpenWeatherMapAPI"]}");
+  if (OWM.statusCode != 200) {
+    throw Exception("Fetching weather failed.");
+  }
+  return Weather.fromJson(jsonDecode(OWM.body));
+}
+
+Future<Weather> fetchWeatherByCoordinates() async {
+  String apiKeys = await rootBundle.loadString("api/api.json");
+  Map<dynamic, dynamic> apiKeysDict = await jsonDecode(apiKeys);
+  var latlng = await Gps.currentGps().catchError((e) => print(e));
+  http.Response OWM = await http.get(
+      "https://api.openweathermap.org/data/2.5/weather?lat=${latlng.lng}&lon=${latlng.lat}&appid=${apiKeysDict["OpenWeatherMapAPI"]}");
   if (OWM.statusCode != 200) {
     throw Exception("Fetching weather failed.");
   }

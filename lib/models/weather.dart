@@ -18,7 +18,7 @@ class Weather extends Equatable {
   final int visibility;
 
   final double windSpeed;
-  final int windDirection;
+  final double windDirection;
 
   final String city;
   final String country;
@@ -61,8 +61,8 @@ class Weather extends Equatable {
         ]);
 
   factory Weather.fromJson(Map<String, dynamic> json) => Weather(
-      longitude: json["lon"],
-      latitude: json["lat"],
+      longitude: json["coord"]["lon"],
+      latitude: json["coord"]["lat"],
       time: json["dt"],
       sunrise: json["sys"]["sunrise"],
       sunset: json["sys"]["sunset"],
@@ -75,8 +75,8 @@ class Weather extends Equatable {
       humidity: json["main"]["temp"],
       pressure: json["main"]["pressure"],
       visibility: json["visibility"],
-      windSpeed: (json["wind"]["speed"] as double),
-      windDirection: json["wind"]["deg"],
+      windSpeed: (json["wind"]["speed"] * 1.0),
+      windDirection: (json["wind"]["deg"]* 1.0),
       city: json["name"],
       country: json["sys"]["country"]);
   

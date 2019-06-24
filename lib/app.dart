@@ -38,6 +38,7 @@ class _WeatheriaState extends State<Weatheria> {
                 elevation: 0,
                 actions: <Widget>[
                   _searchButton(store),
+                  _currentLocationWeatherButton(store),
                   _settingsButton(store, context)
                 ],
                 title: _searchInput(store),
@@ -94,6 +95,28 @@ class _WeatheriaState extends State<Weatheria> {
       onPressed: _controller.text.length > 0
           ? () {
               store.dispatch(WeatherFetch(cityName: cityName));
+              searchFocus.unfocus();
+              _controller.clear();
+            }
+          : null,
+    );
+  }
+
+  FloatingActionButton _currentLocationWeatherButton(Store store) {
+    return FloatingActionButton(
+      backgroundColor: Colors.transparent,
+      foregroundColor: Colors.red,
+      disabledElevation: 0,
+      highlightElevation: 0,
+      elevation: 0,
+      mini: true,
+      child: Icon(
+        Icons.my_location,
+        color: Colors.white,
+      ),
+      onPressed: _controller.text.length > 0
+          ? () {
+              store.dispatch(WeatherFetch(type: FetchType.GPS));
               searchFocus.unfocus();
               _controller.clear();
             }

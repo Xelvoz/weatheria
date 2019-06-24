@@ -29,6 +29,7 @@ dependencies:
   http:
   redux_logging:
   intl:
+  gps:
 
 dev_dependencies:
   flutter_test:

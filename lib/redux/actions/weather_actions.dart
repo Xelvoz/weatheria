@@ -1,13 +1,15 @@
 import 'package:weatheria/models/weather.dart';
 
-abstract class WeatherActions {}
+enum FetchType {CITY, GPS}
 
+abstract class WeatherActions {}
 
 
 class WeatherFetch extends WeatherActions {
   final String cityName;
+  final FetchType type;
 
-  WeatherFetch({this.cityName});
+  WeatherFetch({this.cityName, this.type = FetchType.CITY});
 
   @override
   String toString() {

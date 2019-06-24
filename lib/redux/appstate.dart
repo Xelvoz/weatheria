@@ -31,16 +31,16 @@ class AppState extends Equatable {
   Color colorBegin() => (weatherState == null)
       ? Color(0xFF574B90)
       : ((weatherState.sunrise >= weatherState.time &&
-              weatherState.time <= weatherState.sunset) || (weatherState.sunrise <= weatherState.time))
+              weatherState.time <= weatherState.sunset) || (weatherState.icon.contains("n")))
           ? Color(0xFF303952)
-          : Color(0xFFF19066);
+          : Color(0xFF4a69bd);
 
   Color colorEnd() => (weatherState == null)
       ? Color(0xFF786FA6)
-      : ((weatherState.sunset >= weatherState.time &&
-              weatherState.time <= weatherState.sunrise) || (weatherState.sunset <= weatherState.time))
+      : ((weatherState.sunrise >= weatherState.time &&
+              weatherState.time <= weatherState.sunset) || (weatherState.icon.contains("n")))
           ? Color(0xFF596275)
-          : Color(0xFFF5CD79);
+          : Color(0xFF6a89cc);
 
   @override
   String toString() {
