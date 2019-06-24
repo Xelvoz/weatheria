@@ -9,23 +9,27 @@ class AppState extends Equatable {
   final SCREENS currentScreen;
   final Weather weatherState;
   final Status status;
+  final Units unit;
 
   AppState(
       {this.currentScreen,
       this.weatherState,
-      this.status})
-      : super([currentScreen, weatherState, status]);
+      this.status,
+      this.unit})
+      : super([currentScreen, weatherState, status, unit]);
 
   factory AppState.initialState() => AppState(
       currentScreen: SCREENS.HOME,
       weatherState: null,
-      status: Status.IDLE);
+      status: Status.IDLE,
+      unit: Units.Celsius);
 
-  AppState copyWith({currentScreen, weatherState, status}) {
+  AppState copyWith({currentScreen, weatherState, status, unit}) {
     return AppState(
         currentScreen: currentScreen ?? this.currentScreen,
         weatherState: weatherState ?? this.weatherState,
-        status: status ?? this.status);
+        status: status ?? this.status,
+        unit: unit ?? this.unit);
   }
 
   Color colorBegin() => (weatherState == null)
@@ -41,6 +45,19 @@ class AppState extends Equatable {
               weatherState.time <= weatherState.sunset) || (weatherState.icon.contains("n")))
           ? Color(0xFF596275)
           : Color(0xFF6a89cc);
+  
+  String temperatureWithUnits({Temperature temperature}) {
+    switch (unit) {
+      case Units.Celsius:
+        return "${temperature.temperatureInCelsius}°C";
+      case Units.Kelvin:
+        return "${temperature.temp.round()}°K";
+      case Units.Fahrenheit:
+        return "${temperature.temperatureInFahrenheit}°F";
+      default:
+        return "${temperature.temperatureInCelsius}°C";
+    }
+  }
 
   @override
   String toString() {

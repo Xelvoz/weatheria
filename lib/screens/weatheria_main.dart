@@ -27,15 +27,20 @@ class _WeatheriaMainState extends State<WeatheriaMain> {
       body: Stack(
         children: <Widget>[
           WeatheriaHome(),
-          AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: <Widget>[
-              _searchButton(store),
-              _currentLocationWeatherButton(store),
-              _settingsButton(store, context)
-            ],
-            title: _searchInput(store),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: <Widget>[
+                _searchButton(store),
+                _currentLocationWeatherButton(store),
+                _settingsButton(store, context)
+              ],
+              title: _searchInput(store),
+            ),
           ),
         ],
       ),

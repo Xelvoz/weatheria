@@ -4,8 +4,7 @@ import 'package:weatheria/redux/appstate.dart';
 AppState appStateReducer(AppState state, dynamic action) {
 
   if (action is ChangeUnit) {
-    AppState newState = state.copyWith();
-    newState.weatherState.temperature.unit = action.unit;
+    AppState newState = state.copyWith(unit: action.unit);
     return newState;
   }
 

@@ -23,7 +23,7 @@ class _WeatheriaSettingsState extends State<WeatheriaSettings> {
   @override
   void initState() {
     super.initState();
-    unit = store.state.weatherState?.temperature?.unit;
+    unit = store.state.unit;
   }
 
   @override
@@ -32,10 +32,15 @@ class _WeatheriaSettingsState extends State<WeatheriaSettings> {
       body: Stack(
         children: <Widget>[
           _displaySettings(store: store),
-          AppBar(
-            leading: _backButton(context),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: AppBar(
+              leading: _backButton(context),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
           ),
         ],
       ),
@@ -100,34 +105,36 @@ class _WeatheriaSettingsState extends State<WeatheriaSettings> {
       ),
       subtitle: Text(
         "Default: Celsius.\nAvailable units: Celsius, Fahrenheit, Kelvin.",
-        style: TextStyle(
-            fontSize: 9, fontWeight: FontWeight.w700, color: Colors.white54),
+        style: TextStyle(fontSize: 9, color: Colors.white54),
       ),
-      trailing: DropdownButton(
-        style: TextStyle(
-            fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white54),
-        isDense: true,
-        value: unit,
-        onChanged: (value) {
-          store.dispatch(ChangeUnit(unit: value));
-          setState(() {
-            unit = value;
-          });
-        },
-        items: <DropdownMenuItem>[
-          DropdownMenuItem(
-            value: Units.Celsius,
-            child: Text("Celsius"),
-          ),
-          DropdownMenuItem(
-            value: Units.Fahrenheit,
-            child: Text("Fahrenheit"),
-          ),
-          DropdownMenuItem(
-            value: Units.Kelvin,
-            child: Text("Kelvin"),
-          ),
-        ],
+      trailing: new Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Colors.blueGrey,
+        ),
+        child: DropdownButton(
+          style: TextStyle(
+              fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
+          isDense: true,
+          value: unit,
+          onChanged: (value) {
+            store.dispatch(ChangeUnit(unit: value));
+            setState(() {
+              unit = value;
+            });
+          },
+          items: Units.values
+              .map(
+                (u) => DropdownMenuItem(
+                      value: u,
+                      child: Text(
+                        u.toString().split(".")[1],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                    ),
+              )
+              .toList(),
+        ),
       ),
     );
   }

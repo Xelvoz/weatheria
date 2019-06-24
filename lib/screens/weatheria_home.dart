@@ -47,15 +47,19 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
       } else {
         return Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               _displayCityAndCountryName(state),
               _displayCityDateAndTime(state),
+              Expanded(child: Container(),),
               _displayGeneralTemperatureWithIcon(
+                  state: state,
                   temperature: state.weatherState.temperature,
                   icon: state.weatherState.weatherIcon()),
               // _horizontalDivider(context),
+              Expanded(child: Container(),),
               _displaySunsetAndSunrise(state),
+              Expanded(child: Container(),),
             ],
           ),
         );
@@ -106,12 +110,11 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
             "Please choose a city above.",
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                decorationStyle: TextDecorationStyle.dotted,
-                decoration: TextDecoration.combine([
-                  TextDecoration.overline,
-                ])),
+              color: Colors.white,
+              fontSize: 20,
+              decorationStyle: TextDecorationStyle.dotted,
+              decoration: TextDecoration.overline,
+            ),
           )
         ],
       ),
@@ -183,12 +186,12 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
   }
 
   Widget _displayGeneralTemperatureWithIcon(
-      {Temperature temperature, IconData icon}) {
+      {AppState state, Temperature temperature, IconData icon}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Text(
-          "$temperature",
+          "${state.temperatureWithUnits(temperature: temperature)}",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 60, color: Colors.white70),
         ),

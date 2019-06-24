@@ -123,7 +123,6 @@ class Temperature {
   final double temp;
   final double minTemp;
   final double maxTemp;
-  Units unit = Units.Celsius;
 
   Temperature({this.temp, this.minTemp, this.maxTemp});
 
@@ -131,21 +130,8 @@ class Temperature {
   int get minTemperatureInCelsius => (minTemp - 273.15).round();
   int get maxTemperatureInCelsius => (maxTemp - 273.15).round();
 
-  int get temperatureInFahrenheit => (temp - 273.15).round();
-  int get minTemperatureInFahrenheit => (minTemp - 273.15).round();
-  int get maxTemperatureInFahrenheit => (maxTemp - 273.15).round();
+  int get temperatureInFahrenheit => ((temp - 273.15) * (9/5) + 32).round();
+  int get minTemperatureInFahrenheit => ((minTemp - 273.15) * (9/5) + 32).round();
+  int get maxTemperatureInFahrenheit => ((maxTemp - 273.15) * (9/5) + 32).round();
 
-  @override
-  String toString() {
-    switch (unit) {
-      case Units.Celsius:
-        return "$temperatureInCelsius°C";
-      case Units.Fahrenheit:
-        return "$temp°K";
-      case Units.Kelvin:
-        return "$temperatureInFahrenheit°F";
-      default:
-        return "$temperatureInCelsius°C";
-    }
-  }
 }
