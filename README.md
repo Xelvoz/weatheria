@@ -23,3 +23,4 @@
     * Temperature, Sunrise & Sunset, Wind speed and direction, Humidity.
   
  * Temperature unit conversion (Kelvin, Celsius, Fahrenheit).
+ * Theme adapts to day/night cycle of the city.
