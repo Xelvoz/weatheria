@@ -6,16 +6,16 @@
 
 ***Please don't look at the code. :)***
 
+<p align="center">
+<img src="screenshots/preview.gif"></img>
+</p>
+
 
 |   |   |   |
 |---|---|---|
 |![](screenshots/1.png)|![](screenshots/2.png)|![](screenshots/3.png)|
 |![](screenshots/4.png)|![](screenshots/5.png)|![](screenshots/6.png)|
 
-<br>
-<p align="center">
-<img src="screenshots/preview.gif"></img>
-</p>
 
 ## Features
 
