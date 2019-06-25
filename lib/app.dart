@@ -15,6 +15,7 @@ class Weatheria extends StatelessWidget {
     return StoreProvider<AppState>(
         store: store,
         child: MaterialApp(
+            title: "Weatheria 🌞",
             routes: Routes.routes(store),
             theme: ThemeData(fontFamily: "Mali"),
             debugShowCheckedModeBanner: false,

@@ -115,6 +115,11 @@ class Weather extends Equatable {
       return null;
    }
   }
+
+  @override
+  String toString() {
+    return "Weather Statistics for $city, $country";
+  }
 }
 
 enum Units { Kelvin, Celsius, Fahrenheit }

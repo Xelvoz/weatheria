@@ -61,7 +61,7 @@ class AppState extends Equatable {
 
   @override
   String toString() {
-    return "Weather: $weatherState, Status: ${status.toString()}";
+    return "$weatherState, Status: ${status.toString()}";
   }
 }
 
