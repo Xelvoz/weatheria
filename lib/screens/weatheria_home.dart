@@ -51,15 +51,42 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
             children: <Widget>[
               _displayCityAndCountryName(state),
               _displayCityDateAndTime(state),
-              Expanded(child: Container(),),
+              Expanded(
+                child: Container(),
+              ),
               _displayGeneralTemperatureWithIcon(
                   state: state,
                   temperature: state.weatherState.temperature,
                   icon: state.weatherState.weatherIcon()),
               // _horizontalDivider(context),
-              Expanded(child: Container(),),
+              Expanded(
+                child: Container(),
+              ),
               _displaySunsetAndSunrise(state),
-              Expanded(child: Container(),),
+              Expanded(
+                child: Container(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                _weatherInfoTile(
+                  icon: Icon(WeatherIcons.wind, color: Colors.white70, size: 40,),
+                  iconBackground: Colors.blueGrey,
+                  title: Text("${state.weatherState.windSpeed} m/s", style: TextStyle(color: Colors.white70),),
+                  description: Text("${state.weatherState.windDirection}°", style: TextStyle(color: Colors.white70),),
+                  padding: 25
+                ),
+                _weatherInfoTile(
+                  icon: Icon(Icons.opacity, color: Colors.lightBlue[100], size: 40,),
+                  iconBackground: Colors.blueGrey,
+                  title: Text("Humidity", style: TextStyle(color: Colors.white70),),
+                  description: Text("${state.weatherState.humidity}%", style: TextStyle(color: Colors.white70),),
+                  padding: 15
+                ),
+              ],),
+              Expanded(
+                child: Container(),
+              ),
             ],
           ),
         );
@@ -139,17 +166,20 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
             time: state.weatherState.sunrise + state.weatherState.timezone,
             mode: sunMode.SUNRISE,
             iconColor: Colors.yellow[200]),
-        Container(
-          width: 1,
-          height: 40,
-          decoration: BoxDecoration(color: Colors.white70),
-        ),
         _displaySunsetOrSunrise(
             time: state.weatherState.sunset + state.weatherState.timezone,
             mode: sunMode.SUNSET,
             iconColor: Colors.red[200]),
       ],
     );
+  }
+
+  Container _verticalDivider() {
+    return Container(
+        width: 1,
+        height: 40,
+        decoration: BoxDecoration(color: Colors.white70),
+      );
   }
 
   Container _horizontalDivider(BuildContext context) {
@@ -190,17 +220,54 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Text(
-          "${state.temperatureWithUnits(temperature: temperature)}",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 60, color: Colors.white70),
+        Column(
+          children: <Widget>[
+            Text(
+              "${state.temperatureWithUnits(temperature: temperature)}",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 60, color: Colors.white70),
+            ),
+            Row(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.trending_up, color: Colors.redAccent, size: 18),
+                    SizedBox(width: 10,),
+                    Text(
+                      "${state.temperatureWithUnits(temperature: state.weatherState.temperature.maxTemperature())}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: Colors.white70),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.trending_down,
+                        color: Colors.cyanAccent, size: 18),
+                    SizedBox(width: 10,),
+                    Text(
+                      "${state.temperatureWithUnits(temperature: state.weatherState.temperature.minTemperature())}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 12, color: Colors.white70),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ]..addAll(icon != null
           ? [
-              Container(
-                width: 1,
-                height: 60,
-                decoration: BoxDecoration(color: Colors.white70),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Container(
+                  width: 1,
+                  height: 80,
+                  decoration: BoxDecoration(color: Colors.white70),
+                ),
               ),
               Icon(
                 icon,
@@ -224,7 +291,7 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
               WeatherIcons.sunrise,
               size: 40,
               color: iconColor,
-            ),
+            ),  
           ),
           SizedBox(
             width: 25,
@@ -242,6 +309,29 @@ class _WeatheriaHomeState extends State<WeatheriaHome> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 12, color: Colors.white70),
               )
+            ],
+          ),
+        ]);
+  }
+
+  Widget _weatherInfoTile({Icon icon, Color iconBackground, Text title, Text description, double padding}) {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: iconBackground),
+            child: icon
+          ),
+          SizedBox(
+            width: padding,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              title,
+              description
             ],
           ),
         ]);

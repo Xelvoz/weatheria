@@ -13,7 +13,7 @@ class Weather extends Equatable {
   final Temperature temperature;
 
   final int pressure;
-  final double humidity;
+  final int humidity;
 
   final int visibility;
 
@@ -72,7 +72,7 @@ class Weather extends Equatable {
           temp: json["main"]["temp"],
           maxTemp: json["main"]["temp_max"],
           minTemp: json["main"]["temp_min"]),
-      humidity: json["main"]["temp"],
+      humidity: json["main"]["humidity"],
       pressure: json["main"]["pressure"],
       visibility: json["visibility"],
       windSpeed: (json["wind"]["speed"] * 1.0),
@@ -126,12 +126,11 @@ class Temperature {
 
   Temperature({this.temp, this.minTemp, this.maxTemp});
 
+  Temperature minTemperature() => Temperature(temp: minTemp);
+  Temperature maxTemperature() => Temperature(temp: maxTemp);
+
   int get temperatureInCelsius => (temp - 273.15).round();
-  int get minTemperatureInCelsius => (minTemp - 273.15).round();
-  int get maxTemperatureInCelsius => (maxTemp - 273.15).round();
 
   int get temperatureInFahrenheit => ((temp - 273.15) * (9/5) + 32).round();
-  int get minTemperatureInFahrenheit => ((minTemp - 273.15) * (9/5) + 32).round();
-  int get maxTemperatureInFahrenheit => ((maxTemp - 273.15) * (9/5) + 32).round();
 
 }

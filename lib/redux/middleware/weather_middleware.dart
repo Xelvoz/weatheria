@@ -11,6 +11,8 @@ import 'package:gps/gps.dart';
 Middleware<AppState> appStateMiddleWare() {
   return (Store store, action, NextDispatcher next) async {
     if (action is WeatherFetch) {
+      print(action.cityName);
+      print(action.type);
       try {
         store.dispatch(WeatherLoading());
         Weather w;

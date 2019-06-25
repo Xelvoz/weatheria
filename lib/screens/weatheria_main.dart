@@ -24,6 +24,7 @@ class _WeatheriaMainState extends State<WeatheriaMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
           WeatheriaHome(),
