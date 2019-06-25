@@ -14,10 +14,12 @@
 
 <br>
 <center>
-<img src="https://i.imgur.com/cvdjPim.gif"></img>
+<img src="screenshots/preview.gif"></img>
 </center>
 
 ## Features
 
  * Get weather statistics by city name or current location.
+    * Temperature, Sunrise & Sunset, Wind speed and direction, Humidity.
+  
  * Temperature unit conversion (Kelvin, Celsius, Fahrenheit).
