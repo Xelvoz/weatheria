@@ -13,9 +13,9 @@
 |![](screenshots/4.png)|![](screenshots/5.png)|![](screenshots/6.png)|
 
 <br>
-<center>
+<p align="center">
 <img src="screenshots/preview.gif"></img>
-</center>
+</p>
 
 ## Features
 
