@@ -1,48 +1,49 @@
+import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
 import 'package:weatheria/models/weather.dart';
 import 'package:weatheria/redux/actions/weather_actions.dart';
 import 'package:weatheria/redux/appstate.dart';
 
+import '../redux/appstate.dart';
+
 class WeatheriaSettings extends StatefulWidget {
-  final Store<AppState> store;
-
-  WeatheriaSettings({this.store});
-
   @override
-  _WeatheriaSettingsState createState() =>
-      _WeatheriaSettingsState(store: store);
+  _WeatheriaSettingsState createState() => _WeatheriaSettingsState();
 }
 
 class _WeatheriaSettingsState extends State<WeatheriaSettings> {
-  final Store<AppState> store;
   Units unit;
-
-  _WeatheriaSettingsState({this.store});
 
   @override
   void initState() {
     super.initState();
-    unit = store.state.unit;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          _displaySettings(store: store),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: AppBar(
-              leading: _backButton(context),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
+    return StoreConnector<AppState, Store<AppState>>(
+      onInit: (store) {
+        print(unit);
+        unit = store.state.weatherState.temperature.unit;
+        print(unit);
+      },
+      converter: (store) => store,
+      builder: (context, store) => Scaffold(
+        body: Stack(
+          children: <Widget>[
+            _displaySettings(store: store),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: AppBar(
+                leading: _backButton(context),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -112,8 +113,7 @@ class _WeatheriaSettingsState extends State<WeatheriaSettings> {
           canvasColor: Colors.blueGrey,
         ),
         child: DropdownButton(
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
           isDense: true,
           value: unit,
           onChanged: (value) {
@@ -123,16 +123,14 @@ class _WeatheriaSettingsState extends State<WeatheriaSettings> {
             });
           },
           items: Units.values
-              .map(
-                (u) => DropdownMenuItem(
-                      value: u,
-                      child: Text(
-                        u.toString().split(".")[1],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white70),
-                      ),
+              .map((u) => DropdownMenuItem(
+                    value: u,
+                    child: Text(
+                      u.toString().split(".")[1],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white70),
                     ),
-              )
+                  ))
               .toList(),
         ),
       ),

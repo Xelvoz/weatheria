@@ -41,24 +41,43 @@ class Weather extends Equatable {
       this.city,
       this.country,
       this.timezone,
-      this.icon})
-      : super([
-          longitude,
-          latitude,
-          time,
-          sunrise,
-          sunset,
-          temperature,
-          humidity,
-          pressure,
-          visibility,
-          windSpeed,
-          windDirection,
-          city,
-          country,
-          timezone,
-          icon
-        ]);
+      this.icon});
+
+  Weather copyWith({
+    longitude,
+    latitude,
+    time,
+    sunrise,
+    sunset,
+    temperature,
+    humidity,
+    pressure,
+    visibility,
+    windSpeed,
+    windDirection,
+    city,
+    country,
+    timezone,
+    icon,
+  }) {
+    return Weather(
+      longitude: longitude ?? this.longitude,
+      latitude: latitude ?? this.latitude,
+      time: time ?? this.time,
+      sunrise: sunrise ?? this.sunrise,
+      sunset: sunset ?? this.sunset,
+      temperature: temperature ?? this.temperature,
+      humidity: humidity ?? this.humidity,
+      pressure: pressure ?? this.pressure,
+      visibility: visibility ?? this.visibility,
+      windSpeed: windSpeed ?? this.windSpeed,
+      windDirection: windDirection ?? this.windDirection,
+      city: city ?? this.city,
+      country: country ?? this.country,
+      timezone: timezone ?? this.timezone,
+      icon: icon ?? this.icon,
+    );
+  }
 
   factory Weather.fromJson(Map<String, dynamic> json) => Weather(
       longitude: json["coord"]["lon"],
@@ -76,50 +95,69 @@ class Weather extends Equatable {
       pressure: json["main"]["pressure"],
       visibility: json["visibility"],
       windSpeed: (json["wind"]["speed"] * 1.0),
-      windDirection: (json["wind"]["deg"]* 1.0),
+      windDirection: (json["wind"]["deg"] * 1.0),
       city: json["name"],
       country: json["sys"]["country"]);
-  
+
   IconData weatherIcon() {
-   switch (icon) {
-     case "01d":
-      return WeatherIcons.sun;
-    case "01n":
-      return WeatherIcons.moon;
-    case "02d":
-      return WeatherIcons.cloud_sun;
-    case "02n":
-      return WeatherIcons.cloud_moon;
-    case "03d":
-    case "03n":
-      return WeatherIcons.cloud;
-    case "04d":
-    case "04n":
-      return WeatherIcons.clouds;
-    case "09d":
-    case "09n":
-    case "10d":
-    case "10n":
-      return WeatherIcons.rain;
-    case "11d":
-    case "11n":
-      return WeatherIcons.cloud_flash;
-    case "11d":
-    case "11n":
-      return WeatherIcons.snow;
-    case "50d":
-      return WeatherIcons.fog;
-    case "50n":
-      return WeatherIcons.fog_moon;
-    default:
-      return null;
-   }
+    switch (icon) {
+      case "01d":
+        return WeatherIcons.sun;
+      case "01n":
+        return WeatherIcons.moon;
+      case "02d":
+        return WeatherIcons.cloud_sun;
+      case "02n":
+        return WeatherIcons.cloud_moon;
+      case "03d":
+      case "03n":
+        return WeatherIcons.cloud;
+      case "04d":
+      case "04n":
+        return WeatherIcons.clouds;
+      case "09d":
+      case "09n":
+      case "10d":
+      case "10n":
+        return WeatherIcons.rain;
+      case "11d":
+      case "11n":
+        return WeatherIcons.cloud_flash;
+      case "11d":
+      case "11n":
+        return WeatherIcons.snow;
+      case "50d":
+        return WeatherIcons.fog;
+      case "50n":
+        return WeatherIcons.fog_moon;
+      default:
+        return null;
+    }
   }
 
   @override
   String toString() {
     return "Weather Statistics for $city, $country";
   }
+
+  @override
+  List<Object> get props => [
+        longitude,
+        latitude,
+        time,
+        sunrise,
+        sunset,
+        temperature,
+        humidity,
+        pressure,
+        visibility,
+        windSpeed,
+        windDirection,
+        city,
+        country,
+        timezone,
+        icon,
+      ];
 }
 
 enum Units { Kelvin, Celsius, Fahrenheit }
@@ -128,14 +166,37 @@ class Temperature {
   final double temp;
   final double minTemp;
   final double maxTemp;
+  final Units unit;
 
-  Temperature({this.temp, this.minTemp, this.maxTemp});
+  Temperature({this.temp, this.minTemp, this.maxTemp, this.unit = Units.Celsius});
 
-  Temperature minTemperature() => Temperature(temp: minTemp);
-  Temperature maxTemperature() => Temperature(temp: maxTemp);
+  Temperature copyWith({temp, minTemp, maxTemp, unit}) {
+    return Temperature(
+      temp: temp ?? this.temp,
+      minTemp: minTemp ?? this.minTemp,
+      maxTemp: maxTemp ?? this.maxTemp,
+      unit: unit ?? this.unit,
+    );
+  }
+
+  Temperature minTemperature() => Temperature(temp: minTemp, unit: unit);
+  Temperature maxTemperature() => Temperature(temp: maxTemp, unit: unit);
 
   int get temperatureInCelsius => (temp - 273.15).round();
 
-  int get temperatureInFahrenheit => ((temp - 273.15) * (9/5) + 32).round();
+  int get temperatureInFahrenheit => ((temp - 273.15) * (9 / 5) + 32).round();
 
+  @override
+  String toString() {
+    switch (unit) {
+      case Units.Celsius:
+        return "$temperatureInCelsius°C";
+      case Units.Kelvin:
+        return "${temp.round()}°K";
+      case Units.Fahrenheit:
+        return "$temperatureInFahrenheit°F";
+      default:
+        return "$temperatureInCelsius°C";
+    }
+  }
 }

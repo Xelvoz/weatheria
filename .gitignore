@@ -71,6 +71,6 @@
 
 
 # API-related
-/api/
+.env*
 **/*.jks*
 **/key.properties
