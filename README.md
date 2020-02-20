@@ -2,10 +2,6 @@
 
 ### A beautiful and minimalistic weather app made with Dart, Flutter and Redux.
 
-*This project was part of an attempt to learn Dart and Flutter.*
-
-***Please don't look at the code. :)***
-
 <p align="center">
 <img src="screenshots/preview.gif"></img>
 </p>
